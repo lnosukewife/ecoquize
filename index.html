@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>생태·환경 퀴즈 게임</title>
+<style>
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+  }
+  body {
+    background: linear-gradient(135deg, #a8e063, #56ab2f);
+    color: #fff;
+    display: flex; justify-content: center; align-items: center;
+    height: 100vh; overflow: hidden;
+  }
+  .container {
+    width: 90%; max-width: 600px;
+    text-align: center;
+    background: rgba(0,0,0,0.3);
+    padding: 40px; border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  }
+  h1 {
+    font-size: 2rem; margin-bottom: 1.5rem;
+  }
+  .question {
+    font-size: 1.2rem; margin-bottom: 2rem;
+  }
+  .answers button {
+    display: block;
+    width: 100%;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: none;
+    padding: 15px;
+    font-size: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+  .answers button:hover {
+    background: rgba(255,255,255,0.3);
+  }
+  .hidden {
+    display: none;
+  }
+  .result {
+    font-size: 1.4rem;
+  }
+  .restart {
+    margin-top: 2rem;
+    background: #fff;
+    color: #2b7a0b;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌿 생태·환경 퀴즈 🌎</h1>
+    <div id="quiz">
+      <div class="question"></div>
+      <div class="answers"></div>
+    </div>
+    <div id="result" class="hidden">
+      <div class="result"></div>
+      <button class="restart">다시하기</button>
+    </div>
+  </div>
+
+<script>
+const quizData = [
+  { question: "1. 지구 평균 기온 상승의 주요 원인은?", answers: ["산소 증가", "온실가스 배출", "바다 수온 하강", "오존층 회복"], correct: 1 },
+  { question: "2. 생물 다양성이란?", answers: ["생물의 키 차이", "생물종의 수와 다양성", "기후의 변화율", "바다의 넓이"], correct: 1 },
+  { question: "3. 재활용 가능한 자원이 아닌 것은?", answers: ["플라스틱", "유리병", "음식물 쓰레기", "캔"], correct: 2 },
+  { question: "4. 탄소중립의 목표는?", answers: ["이산화탄소 배출 0", "산소 생산 2배", "지구 냉각", "화석연료 확대"], correct: 0 },
+  { question: "5. 미세먼지의 주요 발생 원인은?", answers: ["화산 폭발", "공장 및 차량 배출", "숲의 증산작용", "바람"], correct: 1 },
+  { question: "6. 해양 플라스틱 쓰레기의 가장 큰 문제는?", answers: ["물의 색 변화", "해양 생물 위협", "바다 깊이 상승", "기후 개선"], correct: 1 },
+  { question: "7. 멸종위기종 보호의 주된 이유는?", answers: ["관광산업", "생태계 균형 유지", "경제 성장", "도시 발전"], correct: 1 },
+  { question: "8. 태양광, 풍력 발전은 어떤 에너지?", answers: ["재생에너지", "핵에너지", "화석에너지", "인공에너지"], correct: 0 },
+  { question: "9. 기후변화 대응을 위한 국제협약은?", answers: ["파리협정", "베를린조약", "리우헌장", "워싱턴선언"], correct: 0 },
+  { question: "10. 우리가 실천할 수 있는 환경 보호 방법은?", answers: ["일회용품 사용 늘리기", "대중교통 이용", "쓰레기 무단투기", "전기 낭비"], correct: 1 },
+];
+
+let current = 0;
+let score = 0;
+
+const questionEl = document.querySelector('.question');
+const answersEl = document.querySelector('.answers');
+const quizEl = document.getElementById('quiz');
+const resultEl = document.getElementById('result');
+const resultText = document.querySelector('.result');
+const restartBtn = document.querySelector('.restart');
+
+function loadQuestion() {
+  const q = quizData[current];
+  questionEl.textContent = q.question;
+  answersEl.innerHTML = "";
+  q.answers.forEach((ans, i) => {
+    const btn = document.createElement('button');
+    btn.textContent = ans;
+    btn.onclick = () => selectAnswer(i);
+    answersEl.appendChild(btn);
+  });
+}
+
+function selectAnswer(i) {
+  if (i === quizData[current].correct) score++;
+  current++;
+  if (current < quizData.length) {
+    loadQuestion();
+  } else {
+    showResult();
+  }
+}
+
+function showResult() {
+  quizEl.classList.add('hidden');
+  resultEl.classList.remove('hidden');
+  resultText.textContent = `당신의 점수는 ${score} / ${quizData.length} 점입니다!`;
+}
+
+restartBtn.onclick = () => {
+  score = 0;
+  current = 0;
+  quizEl.classList.remove('hidden');
+  resultEl.classList.add('hidden');
+  loadQuestion();
+}
+
+loadQuestion();
+</script>
+</body>
+</html>
